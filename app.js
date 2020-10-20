@@ -35,15 +35,13 @@ $(document).keydown(function () {
 });
 
 // * Catches the Button Clicks
-$(".btn").click(function() {
+$(".btn").click(function () {
     if (gameControl.gameRunning) {
         playSound(this.id);
         checkInput(this.id);
         console.log(gameControl.goalOrder);
-
         this.classList.add("pressed");
         setTimeout(() => this.classList.remove("pressed"), 100);
-
     };
 });
 
@@ -52,9 +50,9 @@ $(".btn").click(function() {
 // * Initializes the game
 function initGame() {
     console.log("Init Game!");
-    gameControl.gameRunning = true;    
+    gameControl.gameRunning = true;
     addColor();
-    setLevel();    
+    setLevel();
     console.log(gameControl.goalOrder);
 }
 
@@ -78,9 +76,14 @@ function checkInput(color) {
 
     } else if (orderWasCorrect && roundIsOver) {
         console.log("Correct :)");
-        setTimeout(addColor(), 10000);
-        setLevel();
-        gameControl.userOrder = [];
+        $("#level-title").text("Correct :)")
+
+        setTimeout(function() {
+            addColor();
+            setLevel();
+            gameControl.userOrder = [];
+        }, 800);    
+        
     };
 };
 
@@ -92,11 +95,11 @@ function addColor() {
     let colorToAdd = gameControl.colors[generateNumber()];
     gameControl.goalOrder.push(colorToAdd);
     playSound(colorToAdd);
-    $("#"+colorToAdd).addClass("pressed-comp");
-    $("#"+colorToAdd).fadeOut(200);
-    setTimeout(() => $("#"+colorToAdd).removeClass("pressed-comp"),200);
-    $("#"+colorToAdd).fadeIn(200);
-    
+    $("#" + colorToAdd).addClass("pressed-comp");
+    $("#" + colorToAdd).fadeOut(200);
+    setTimeout(() => $("#" + colorToAdd).removeClass("pressed-comp"), 200);
+    $("#" + colorToAdd).fadeIn(200);
+
 }
 
 // * Generates a random number based on the length of the available colors
@@ -112,13 +115,13 @@ function setLevel() {
 
 // * Checks the inputs for color and order
 function checkArrays() {
-    for (let i = 0; i < gameControl.userOrder.length; i++){
+    for (let i = 0; i < gameControl.userOrder.length; i++) {
         if (gameControl.goalOrder[i] !== gameControl.userOrder[i]) return false;
     };
     return true;
 }
 
-function playSound(color){
-    // sounds[color].load();
+function playSound(color) {
+    sounds[color].load();
     sounds[color].play();
 }
