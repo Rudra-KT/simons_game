@@ -14,7 +14,8 @@ let gameControl = {
     gameRunning: false,
     colors: ["green", "red", "yellow", "blue"],
     goalOrder: [],
-    userOrder: []
+    userOrder: [],
+    showPattern: 3
 };
 
 let sounds = {
@@ -34,7 +35,7 @@ $(document).keydown(function () {
     };
 });
 
-// * Catches the Button Clicks
+// * Catches the game Button Clicks
 $(".btn").click(function () {
     if (gameControl.gameRunning) {
         playSound(this.id);
@@ -45,12 +46,20 @@ $(".btn").click(function () {
     };
 });
 
+// * Catches the game Button Clicks
+$(".btn-show-pattern").click(function () {
+    if (gameControl.gameRunning && gameControl.showPattern !== 0) {
+        showFullPattern(this);
+    };
+});
+
 // * ----------------- CONTROL FUNCTIONS ----------------- * //
 
 // * Initializes the game
 function initGame() {
     console.log("Init Game!");
     gameControl.gameRunning = true;
+    $(".btn-show-pattern").text("Show full pattern (" + gameControl.showPattern + " left)");
     addColor();
     setLevel();
     console.log(gameControl.goalOrder);
@@ -70,6 +79,7 @@ function checkInput(color) {
         gameControl.gameRunning = false;
         gameControl.goalOrder = [];
         gameControl.userOrder = [];
+        gameControl.showPattern = 3;
         sounds.wrong.play();
         $("body").addClass("game-over");
         setTimeout(() => $("body").removeClass("game-over"), 400);
@@ -78,14 +88,33 @@ function checkInput(color) {
         console.log("Correct :)");
         $("#level-title").text("Correct :)")
 
-        setTimeout(function() {
+        setTimeout(function () {
             addColor();
             setLevel();
             gameControl.userOrder = [];
-        }, 800);    
-        
+        }, 800);
+
     };
 };
+
+function showFullPattern(obj) {
+    gameControl.showPattern -= 1;
+    obj.innerHTML = "Show full pattern (" + gameControl.showPattern + " left)";
+    let index = 0
+    let interval = setInterval(() => {
+        if (index === gameControl.goalOrder.length) {
+            clearInterval(interval);
+        } else {
+            let color = gameControl.goalOrder[index];
+            playSound(color);
+            $("#" + color).addClass("pressed-comp");
+            $("#" + color).fadeOut(200);
+            setTimeout(() => $("#" + color).removeClass("pressed-comp"), 200);
+            $("#" + color).fadeIn(200);
+            index++;
+        }
+    }, 1000)
+}
 
 // * ----------------- HELPER FUNCTIONS ----------------- * //
 
