@@ -14,7 +14,6 @@ body {
   display: block;
   width: 50%;
   margin: auto;
-
 }
 
 .btn {
@@ -24,6 +23,11 @@ body {
   width: 200px;
   border: 10px solid black;
   border-radius: 20%;
+}
+
+.btn-show {
+  display: inline-block;
+  
 }
 
 .game-over {
@@ -55,3 +59,38 @@ body {
 .pressed-comp {
   box-shadow: 0 0 20px red;
 }
+
+.btn-show-pattern {
+  color:#FEF2BF !important;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: #011F3F;
+  padding: 20px;
+  border: 3px solid #494949 !important;
+  display: inline-block;
+  border-radius: 15px;
+  transition: all 0.4s ease 0s;
+  font-family: 'Press Start 2P', cursive;
+  margin-top: 15px;
+  cursor: pointer;
+  background-position: center;
+}
+
+.btn-show-pattern:hover {
+  color: #000 !important;
+  background: #FEF2BF radial-gradient(circle, transparent 1%,  #FEF2BF 1%) center/15000%;;
+  border-color:  #FEF2BF !important;
+  transition: all 0.4s ease 0s;
+}
+
+:focus {
+  outline: 0;
+}
+
+.btn-show-pattern:active {
+  background-color: #000;
+  background-size: 100%;
+  transition: background 0s;
+}
+
+
