@@ -236,6 +236,10 @@ function automaticClickAnimation(color) {
     $("#" + color).fadeIn(200);
 }
 
+/**
+ ** Processes the user input
+ * @param {string} color The color of the button that should be processed
+ */
 function processUserInput(color) {
     playSound(color);
     checkInput(color);
