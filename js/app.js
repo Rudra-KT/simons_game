@@ -7,7 +7,7 @@
 ///// TODO 4: Track outcomes and display them on screen
 ///// TODO 5: Add Animations and classes
 ///// TODO 6: Add possibility to look at the full pattern
-// TODO 7: Change the buttons to arrows and make it playable via keyboard
+///// TODO 7: Change the buttons to arrows and make it playable via keyboard
 // TODO 8: Add different difficulties (varies in tempo) 
 
 // * ----------------- GAME OBJECTS ----------------- * //
@@ -33,10 +33,41 @@ let sounds = {
 /**
  ** Initializes the game on click of a button, if game is not running
  */
-$(document).keydown(function () {
+$(document).keydown(function (e) {
     if (!gameControl.gameRunning) {
         initGame();
-    };
+    } else {
+        let color = "";        
+        switch (e.key) {
+            case ("w"):
+            case ("ArrowUp"):
+                color = "green";
+                console.log(color);
+                break;
+
+            case ("a"):
+            case ("ArrowLeft"):
+                color = "red";
+                console.log(color);
+                break;
+
+            case ("s"):
+            case ("ArrowDown"):
+                color = "blue";
+                console.log(color);
+                break;
+
+            case ("d"):
+            case ("ArrowRight"):                
+                color = "yellow";
+                console.log(color);
+                break;
+
+            default:
+                break;
+        }
+        if (color !== "") { processUserInput(color); };
+    }
 });
 
 /**
@@ -44,11 +75,7 @@ $(document).keydown(function () {
  */
 $(".btn").click(function () {
     if (gameControl.gameRunning) {
-        playSound(this.id);
-        checkInput(this.id);
-        console.log(gameControl.goalOrder);
-        this.classList.add("pressed");
-        setTimeout(() => this.classList.remove("pressed"), 100);
+        processUserInput(this.id);
     };
 });
 
@@ -112,9 +139,9 @@ function checkInput(color) {
         if (gameControl.goalOrder.length % 3 === 0) {
             confetti.start();
             setTimeout(function () {
-            confetti.stop();
+                confetti.stop();
             }, 1200);
-        }        
+        }
     };
 };
 
@@ -207,4 +234,12 @@ function automaticClickAnimation(color) {
     $("#" + color).fadeOut(200);
     setTimeout(() => $("#" + color).removeClass("pressed-comp"), 200);
     $("#" + color).fadeIn(200);
+}
+
+function processUserInput(color) {
+    playSound(color);
+    checkInput(color);
+    console.log(gameControl.goalOrder);
+    $("."+color).addClass(("pressed"));
+    setTimeout(() => $("."+color).removeClass("pressed"), 100);
 }
