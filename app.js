@@ -6,7 +6,9 @@
 ///// TODO 3: Track users Clicks and check them against the random generated colors
 ///// TODO 4: Track outcomes and display them on screen
 ///// TODO 5: Add Animations and classes
-// TODO 6: Add different difficulties (varies in tempo and showing the whole order) 
+///// TODO 6: Add possibility to look at the full pattern
+// TODO 7: Change the buttons to arrows and make it playable via keyboard
+// TODO 8: Add different difficulties (varies in tempo) 
 
 // * ----------------- GAME OBJECTS ----------------- * //
 
@@ -28,14 +30,14 @@ let sounds = {
 
 // * ----------------- EVENT LISTENERS ----------------- * //
 
-// * Starter Function on key press
+// * Initializes the game on click of a button, if game is not running
 $(document).keydown(function () {
     if (!gameControl.gameRunning) {
         initGame();
     };
 });
 
-// * Catches the game Button Clicks
+// * Processes button clicks if the game is running
 $(".btn").click(function () {
     if (gameControl.gameRunning) {
         playSound(this.id);
@@ -46,7 +48,7 @@ $(".btn").click(function () {
     };
 });
 
-// * Catches the game Button Clicks
+// * Processes clicks on the "show pattern" button calls the function showFullPattern() 
 $(".btn-show-pattern").click(function () {
     if (gameControl.gameRunning && gameControl.showPattern !== 0) {
         showFullPattern(this);
@@ -55,7 +57,11 @@ $(".btn-show-pattern").click(function () {
 
 // * ----------------- CONTROL FUNCTIONS ----------------- * //
 
-// * Initializes the game
+/**
+ ** Initializes the game by setting the gameRunning attribute within the gameControl Object to "true"
+ ** and by calling the functions addColor() and setLevel()
+ *
+ */
 function initGame() {
     console.log("Init Game!");
     gameControl.gameRunning = true;
@@ -65,7 +71,14 @@ function initGame() {
     console.log(gameControl.goalOrder);
 }
 
-// * Checks if the input is correct and if a new level should be set
+/**
+ ** Pushes the chosen color of the user to the array gameControl.userOrder and compares it then to the generated Order
+ ** If the input is correct (which is checked in the function checkArrays()) and the round is over, a new round will be initialized
+ ** If the input is not correct, the gameControl object will be reset
+ *
+ * @param {string} color The color the user has chosen * 
+ * 
+ */
 function checkInput(color) {
 
     gameControl.userOrder.push(color);
@@ -97,6 +110,14 @@ function checkInput(color) {
     };
 };
 
+
+/**
+ ** Shows the current correct pattern within gameControl.goalOrder to the user, if not all three tries are used up
+ *
+ * @param {object} obj The button object which was clicked on
+ *  
+ */
+
 function showFullPattern(obj) {
     gameControl.showPattern -= 1;
     obj.innerHTML = "Show full pattern (" + gameControl.showPattern + " left)";
@@ -118,9 +139,11 @@ function showFullPattern(obj) {
 
 // * ----------------- HELPER FUNCTIONS ----------------- * //
 
-// * Adds a color to the stack
-function addColor() {
-    console.log("Color added!");
+/**
+ ** Adds a random color to the gameControl.goalOrder object by generating a number via the generateNumber() 
+ ** function with which a color is picked from the gameControl.colors array
+ */
+function addColor() {    
     let colorToAdd = gameControl.colors[generateNumber()];
     gameControl.goalOrder.push(colorToAdd);
     playSound(colorToAdd);
@@ -128,21 +151,30 @@ function addColor() {
     $("#" + colorToAdd).fadeOut(200);
     setTimeout(() => $("#" + colorToAdd).removeClass("pressed-comp"), 200);
     $("#" + colorToAdd).fadeIn(200);
-
+    console.log("Color added!");
 }
 
-// * Generates a random number based on the length of the available colors
+/**
+ ** Returns a random number between 0 and the length of gameControl.colors array
+ *
+ * @return {number} between 0 and the length of gameControl.colors array
+ */
 function generateNumber() {
     return Math.floor(Math.random() * gameControl.colors.length)
 }
 
-// * Sets the level header based on the length of current colors
+/**
+ ** Changes the #level-title text to the current level (the level = length of the gameControl.goalOrder array)
+ */
 function setLevel() {
     console.log("Level Set!");
     $("#level-title").text("Level " + gameControl.goalOrder.length)
 }
 
-// * Checks the inputs for color and order
+/**
+ ** Checks the arrays gameControl.userOrder and gameControl.goalOrder against each other after each color input
+ * @return {boolean} true if elements of array are equal, otherwise false
+ */
 function checkArrays() {
     for (let i = 0; i < gameControl.userOrder.length; i++) {
         if (gameControl.goalOrder[i] !== gameControl.userOrder[i]) return false;
@@ -150,6 +182,10 @@ function checkArrays() {
     return true;
 }
 
+/**
+ ** Changes the #level-title text to the current level (the level = length of the gameControl.goalOrder array)
+ * @param {string} color The color of the sound that should be played
+ */
 function playSound(color) {
     sounds[color].load();
     sounds[color].play();
