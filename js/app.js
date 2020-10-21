@@ -108,10 +108,13 @@ function checkInput(color) {
             setLevel();
             gameControl.userOrder = [];
         }, 800);
-        confetti.start();
-        setTimeout(function () {
+
+        if (gameControl.goalOrder.length % 5 === 0) {
+            confetti.start();
+            setTimeout(function () {
             confetti.stop();
-        }, 700);
+            }, 700);
+        }        
     };
 };
 
