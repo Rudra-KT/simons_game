@@ -30,14 +30,16 @@ let sounds = {
 
 // * ----------------- EVENT LISTENERS ----------------- * //
 
-// * Initializes the game on click of a button, if game is not running
+/**
+** Initializes the game on click of a button, if game is not running
+*/
 $(document).keydown(function () {
-    if (!gameControl.gameRunning) {
-        initGame();
-    };
+    if (!gameControl.gameRunning) { initGame(); };
 });
 
-// * Processes button clicks if the game is running
+/**
+** Processes button clicks if the game is running
+*/ 
 $(".btn").click(function () {
     if (gameControl.gameRunning) {
         playSound(this.id);
@@ -48,7 +50,9 @@ $(".btn").click(function () {
     };
 });
 
-// * Processes clicks on the "show pattern" button calls the function showFullPattern() 
+/**
+** Processes clicks on the "show pattern" button and calls the function showFullPattern() 
+*/ 
 $(".btn-show-pattern").click(function () {
     if (gameControl.gameRunning && gameControl.showPattern !== 0) {
         showFullPattern(this);
@@ -89,10 +93,7 @@ function checkInput(color) {
     if (!orderWasCorrect) {
         console.log("Wrong :(");
         $("#level-title").text("Game Over! Press any button to restart");
-        gameControl.gameRunning = false;
-        gameControl.goalOrder = [];
-        gameControl.userOrder = [];
-        gameControl.showPattern = 3;
+        resetGameControl();
         sounds.wrong.play();
         $("body").addClass("game-over");
         setTimeout(() => $("body").removeClass("game-over"), 400);
@@ -117,7 +118,6 @@ function checkInput(color) {
  * @param {object} obj The button object which was clicked on
  *  
  */
-
 function showFullPattern(obj) {
     gameControl.showPattern -= 1;
     obj.innerHTML = "Show full pattern (" + gameControl.showPattern + " left)";
@@ -128,10 +128,7 @@ function showFullPattern(obj) {
         } else {
             let color = gameControl.goalOrder[index];
             playSound(color);
-            $("#" + color).addClass("pressed-comp");
-            $("#" + color).fadeOut(200);
-            setTimeout(() => $("#" + color).removeClass("pressed-comp"), 200);
-            $("#" + color).fadeIn(200);
+            clickAnimation(color);
             index++;
         }
     }, 1000)
@@ -147,10 +144,7 @@ function addColor() {
     let colorToAdd = gameControl.colors[generateNumber()];
     gameControl.goalOrder.push(colorToAdd);
     playSound(colorToAdd);
-    $("#" + colorToAdd).addClass("pressed-comp");
-    $("#" + colorToAdd).fadeOut(200);
-    setTimeout(() => $("#" + colorToAdd).removeClass("pressed-comp"), 200);
-    $("#" + colorToAdd).fadeIn(200);
+    clickAnimation(colorToAdd);
     console.log("Color added!");
 }
 
@@ -176,7 +170,7 @@ function setLevel() {
  * @return {boolean} true if elements of array are equal, otherwise false
  */
 function checkArrays() {
-    for (let i = 0; i < gameControl.userOrder.length; i++) {
+    for (i in gameControl.userOrder) {
         if (gameControl.goalOrder[i] !== gameControl.userOrder[i]) return false;
     };
     return true;
@@ -189,4 +183,25 @@ function checkArrays() {
 function playSound(color) {
     sounds[color].load();
     sounds[color].play();
+}
+
+/**
+ ** Resets the gameControl Object 
+ */
+function resetGameControl() {
+    gameControl.gameRunning = false;
+    gameControl.goalOrder = [];
+    gameControl.userOrder = [];
+    gameControl.showPattern = 3;
+}
+
+/**
+ ** Animates the clicked button
+ * @param {string} color The color of the button that should be animated
+ */
+function clickAnimation(color) {
+    $("#" + color).addClass("pressed-comp");
+    $("#" + color).fadeOut(200);
+    setTimeout(() => $("#" + color).removeClass("pressed-comp"), 200);
+    $("#" + color).fadeIn(200);
 }
