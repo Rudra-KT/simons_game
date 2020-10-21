@@ -66,7 +66,7 @@ $(document).keydown(function (e) {
             default:
                 break;
         }
-        if (color !== "") { processUserInput(color); };
+        if (color !== "") { processUserInput(color); }
     }
 });
 
@@ -76,7 +76,7 @@ $(document).keydown(function (e) {
 $(".btn").click(function () {
     if (gameControl.gameRunning) {
         processUserInput(this.id);
-    };
+    }
 });
 
 /**
@@ -85,7 +85,7 @@ $(".btn").click(function () {
 $(".btn-show-pattern").click(function () {
     if (gameControl.gameRunning && gameControl.showPattern !== 0) {
         showFullPattern(this);
-    };
+    }
 });
 
 // * ----------------- CONTROL FUNCTIONS ----------------- * //
@@ -129,7 +129,7 @@ function checkInput(color) {
 
     } else if (orderWasCorrect && roundIsOver) {
         console.log("Correct :)");
-        $("#level-title").text("Correct :)")
+        $("#level-title").text("Correct :)");
         setTimeout(function () {
             addColor();
             setLevel();
@@ -142,8 +142,8 @@ function checkInput(color) {
                 confetti.stop();
             }, 1200);
         }
-    };
-};
+    }
+}
 
 /**
  ** Shows the current correct pattern within gameControl.goalOrder to the user, if not all three tries are used up
@@ -184,7 +184,7 @@ function addColor() {
  * @return {number} between 0 and the length of gameControl.colors array
  */
 function generateNumber() {
-    return Math.floor(Math.random() * gameControl.colors.length)
+    return Math.floor(Math.random() * gameControl.colors.length);
 }
 
 /**
@@ -192,7 +192,7 @@ function generateNumber() {
  */
 function setLevel() {
     console.log("Level Set!");
-    $("#level-title").text("Level " + gameControl.goalOrder.length)
+    $("#level-title").text("Level " + gameControl.goalOrder.length);
 }
 
 /**
@@ -200,9 +200,9 @@ function setLevel() {
  * @return {boolean} true if elements of array are equal, otherwise false
  */
 function checkArrays() {
-    for (i in gameControl.userOrder) {
+    for (let i in gameControl.userOrder) {
         if (gameControl.goalOrder[i] !== gameControl.userOrder[i]) return false;
-    };
+    }
     return true;
 }
 
