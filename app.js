@@ -31,15 +31,17 @@ let sounds = {
 // * ----------------- EVENT LISTENERS ----------------- * //
 
 /**
-** Initializes the game on click of a button, if game is not running
-*/
+ ** Initializes the game on click of a button, if game is not running
+ */
 $(document).keydown(function () {
-    if (!gameControl.gameRunning) { initGame(); };
+    if (!gameControl.gameRunning) {
+        initGame();
+    };
 });
 
 /**
-** Processes button clicks if the game is running
-*/ 
+ ** Processes button clicks if the game is running
+ */
 $(".btn").click(function () {
     if (gameControl.gameRunning) {
         playSound(this.id);
@@ -51,8 +53,8 @@ $(".btn").click(function () {
 });
 
 /**
-** Processes clicks on the "show pattern" button and calls the function showFullPattern() 
-*/ 
+ ** Processes clicks on the "show pattern" button and calls the function showFullPattern() 
+ */
 $(".btn-show-pattern").click(function () {
     if (gameControl.gameRunning && gameControl.showPattern !== 0) {
         showFullPattern(this);
@@ -121,18 +123,15 @@ function checkInput(color) {
 function showFullPattern(obj) {
     gameControl.showPattern -= 1;
     obj.innerHTML = "Show full pattern (" + gameControl.showPattern + " left)";
-    let index = 0
-    let interval = setInterval(() => {
-        if (index === gameControl.goalOrder.length) {
-            clearInterval(interval);
-        } else {
-            let color = gameControl.goalOrder[index];
+
+    gameControl.goalOrder.forEach((color, i) => {
+        setTimeout(() => {
+            $("#" + color).fadeOut(250).fadeIn(250);
             playSound(color);
-            clickAnimation(color);
-            index++;
-        }
-    }, 1000)
+        }, i * (500 - gameControl.goalOrder.length));
+    });
 }
+
 
 // * ----------------- HELPER FUNCTIONS ----------------- * //
 
@@ -140,11 +139,11 @@ function showFullPattern(obj) {
  ** Adds a random color to the gameControl.goalOrder object by generating a number via the generateNumber() 
  ** function with which a color is picked from the gameControl.colors array
  */
-function addColor() {    
+function addColor() {
     let colorToAdd = gameControl.colors[generateNumber()];
     gameControl.goalOrder.push(colorToAdd);
     playSound(colorToAdd);
-    clickAnimation(colorToAdd);
+    automaticClickAnimation(colorToAdd);
     console.log("Color added!");
 }
 
@@ -199,7 +198,7 @@ function resetGameControl() {
  ** Animates the clicked button
  * @param {string} color The color of the button that should be animated
  */
-function clickAnimation(color) {
+function automaticClickAnimation(color) {
     $("#" + color).addClass("pressed-comp");
     $("#" + color).fadeOut(200);
     setTimeout(() => $("#" + color).removeClass("pressed-comp"), 200);
