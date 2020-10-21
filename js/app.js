@@ -109,15 +109,14 @@ function checkInput(color) {
             gameControl.userOrder = [];
         }, 800);
 
-        if (gameControl.goalOrder.length % 5 === 0) {
+        if (gameControl.goalOrder.length % 3 === 0) {
             confetti.start();
             setTimeout(function () {
             confetti.stop();
-            }, 700);
+            }, 1200);
         }        
     };
 };
-
 
 /**
  ** Shows the current correct pattern within gameControl.goalOrder to the user, if not all three tries are used up
