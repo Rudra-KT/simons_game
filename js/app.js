@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 // See if jQuery properly loaded
 // $(document).ready(() => console.log("Ready"));
 
