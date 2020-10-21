@@ -103,13 +103,15 @@ function checkInput(color) {
     } else if (orderWasCorrect && roundIsOver) {
         console.log("Correct :)");
         $("#level-title").text("Correct :)")
-
         setTimeout(function () {
             addColor();
             setLevel();
             gameControl.userOrder = [];
         }, 800);
-
+        confetti.start();
+        setTimeout(function () {
+            confetti.stop();
+        }, 700);
     };
 };
 
@@ -128,7 +130,7 @@ function showFullPattern(obj) {
         setTimeout(() => {
             $("#" + color).fadeOut(250).fadeIn(250);
             playSound(color);
-        }, i * (500 - gameControl.goalOrder.length));
+        }, i * 500);
     });
 }
 
